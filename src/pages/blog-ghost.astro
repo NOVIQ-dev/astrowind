@@ -1,0 +1,29 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('post');
+const metadata = { title: 'Блог из Ghost' };
+---
+
+<Layout metadata={metadata}>
+  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-4xl">
+    <h1 class="text-4xl font-bold mb-8 text-center">Статьи из Ghost</h1>
+    <div class="grid gap-6">
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <article class="p-6 border rounded-lg shadow-sm hover:shadow-md transition">
+            <h2 class="text-2xl font-semibold mb-2">
+              <a href={`/blog/${post.slug}`} class="text-primary hover:underline">
+                {post.data.title}
+              </a>
+            </h2>
+            <p class="text-gray-600 line-clamp-3">{post.data.excerpt}</p>
+          </article>
+        ))
+      ) : (
+        <p class="text-center text-gray-500">Постов пока нет. Добавьте их в админке Ghost!</p>
+      )}
+    </div>
+  </section>
+</Layout>
